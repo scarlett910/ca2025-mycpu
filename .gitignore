@@ -49,7 +49,7 @@ test_run_dir/
 *.fst
 
 # Verilator generated files and build directories
-**/verilog/obj_dir/
+**/verilog/**/obj_dir/
 **/verilog/**/*.v
 **/verilog/**/*.fir
 **/verilog/**/*.anno.json

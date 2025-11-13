@@ -102,6 +102,24 @@ if [[ ! -d "riscv-arch-test" ]] || [[ ! -d "rv32emu" ]]; then
     echo ""
 fi
 
+# Build rv32emu reference model if not already built
+if [[ ! -f "rv32emu/build/rv32emu" ]]; then
+    echo "Building rv32emu reference model..."
+    echo "This is a one-time setup that may take 1-2 minutes..."
+    echo ""
+    pushd rv32emu > /dev/null
+    if make ENABLE_ARCH_TEST=1 ENABLE_FULL4G=1; then
+        echo "✅ rv32emu built successfully"
+    else
+        echo "❌ Failed to build rv32emu"
+        echo "Please check build dependencies and try building manually:"
+        echo "  cd rv32emu && make ENABLE_ARCH_TEST=1 ENABLE_FULL4G=1"
+        exit 1
+    fi
+    popd > /dev/null
+    echo ""
+fi
+
 # Create work directory if it doesn't exist
 mkdir -p "$WORK_DIR"
 

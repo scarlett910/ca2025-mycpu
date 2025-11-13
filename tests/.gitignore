@@ -6,8 +6,9 @@ riscof_work_*/
 rv32emu/
 riscv-arch-test/
 
-# Generated ISA/platform YAML files
-*.yaml
+# Generated ISA/platform YAML files (RISCOF output)
+*_checked.yaml
+database.yaml
 
 # Python bytecode
 __pycache__/
