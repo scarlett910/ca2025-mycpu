@@ -170,5 +170,27 @@ class PipelineProgramTest extends AnyFlatSpec with ChiselScalatestTester {
         c.io.mem_debug_read_data.expect(0x2022L.U)
       }
     }
+
+    it should "correctly execute UF8 encode/decode program" in {
+      runProgram("uf8_test.asmbin", cfg) { c =>
+        // Run UF8 test (3 encode/decode cycles)
+        for (i <- 1 to 20) {
+          c.clock.step(500)
+          c.io.mem_debug_read_address.poke((i * 4).U)
+        }
+
+        // Check result in memory[4]
+        // 0x55 = all tests passed
+        // 0xDEAD = test failed
+        c.io.mem_debug_read_address.poke(4.U)
+        c.clock.step()
+        val result = c.io.mem_debug_read_data.peek().litValue.toInt
+        
+        assert(
+          result == 0x55,
+          f"${cfg.name}: UF8 test failed! Memory[4] = 0x${result}%x (expected 0x55)"
+        )
+      }
+    }
   }
 }
